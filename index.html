@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>八段锦｜课程教学管理</title>
+<style>
+:root{
+  --ink:#20352f;--muted:#687873;--paper:#f6f5ef;--card:#fff;
+  --line:#dde3df;--accent:#6f8f7f;--accent2:#dce8df;--warm:#e9dfc9;
+  --danger:#a36b5c;--shadow:0 12px 36px rgba(38,55,48,.08);
+}
+*{box-sizing:border-box} html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:Inter,"Noto Sans SC","Microsoft YaHei",sans-serif;line-height:1.65}
+button{font:inherit}
+.topbar{position:sticky;top:0;z-index:20;background:rgba(246,245,239,.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.nav{max-width:1180px;margin:auto;height:64px;display:flex;align-items:center;gap:10px;padding:0 22px}
+.brand{font-weight:800;letter-spacing:.04em;margin-right:auto}.brand small{display:block;color:var(--muted);font-size:11px;font-weight:500;letter-spacing:.08em}
+.nav a{color:var(--ink);text-decoration:none;padding:8px 14px;border-radius:999px;font-size:14px}.nav a:hover{background:var(--accent2)}
+.wrap{max-width:1180px;margin:auto;padding:28px 22px 70px}
+.hero{background:linear-gradient(135deg,#e8eee9 0%,#f5f0e4 100%);border:1px solid #dfe6df;border-radius:28px;padding:42px;position:relative;overflow:hidden;box-shadow:var(--shadow)}
+.hero:after{content:"八";position:absolute;right:45px;top:-30px;font-size:260px;font-family:serif;color:rgba(78,104,92,.055);line-height:1}
+.kicker{font-size:13px;color:var(--accent);font-weight:800;letter-spacing:.14em}
+h1{font-family:Georgia,"Songti SC","SimSun",serif;font-size:clamp(38px,6vw,70px);line-height:1.05;margin:10px 0 18px;letter-spacing:-.04em}
+.lead{font-size:18px;color:#536660;max-width:760px;margin:0 0 28px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;position:relative;z-index:1}
+.stat{background:rgba(255,255,255,.72);border:1px solid rgba(220,226,221,.9);border-radius:18px;padding:18px 20px}.stat b{font-size:28px;display:block}.stat span{font-size:13px;color:var(--muted)}
+.section{margin-top:46px}.section-head{display:flex;justify-content:space-between;align-items:end;gap:18px;margin-bottom:18px}.section h2{font-family:Georgia,"Songti SC","SimSun",serif;font-size:30px;margin:0}.section-head p{margin:0;color:var(--muted);font-size:14px}
+.path{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.lesson{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:22px;box-shadow:0 6px 20px rgba(30,50,43,.04);transition:.2s;cursor:pointer}.lesson:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
+.lesson .num{display:inline-flex;width:34px;height:34px;border-radius:50%;align-items:center;justify-content:center;background:var(--accent2);font-weight:800;font-size:13px}.lesson h3{margin:16px 0 8px;font-size:19px}.lesson p{margin:0;color:var(--muted);font-size:13px}.tag{display:inline-block;margin-top:16px;padding:5px 9px;background:#f2f4f1;border-radius:999px;color:#5e7069;font-size:12px}
+.timeline{display:grid;gap:10px}.item{display:grid;grid-template-columns:86px 1fr auto;gap:18px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:16px;padding:15px 18px}.time{font-weight:800;color:var(--accent)}.item strong{display:block}.item small{color:var(--muted)}.mins{font-size:12px;color:var(--muted);white-space:nowrap}
+.lesson-panel{margin-top:18px;background:#fff;border:1px solid var(--line);border-radius:24px;padding:26px;scroll-margin-top:82px}
+.panel-top{display:flex;justify-content:space-between;gap:20px;align-items:start}.panel-top h3{margin:0;font-size:24px}.objective{color:var(--muted);margin:5px 0 0}.pill{padding:7px 11px;border-radius:999px;background:var(--accent2);font-size:12px;font-weight:700;white-space:nowrap}
+.detail-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:18px;margin-top:20px}.box{background:#f8f8f4;border:1px solid #e6e9e5;border-radius:16px;padding:18px}.box h4{margin:0 0 10px;font-size:14px}.box ul{margin:0;padding-left:19px}.box li{margin:5px 0}.box em{font-style:normal;color:#5c7168}
+.checklist{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.check{display:flex;gap:9px;align-items:flex-start;padding:10px 12px;background:#fff;border:1px solid var(--line);border-radius:12px;font-size:13px}.check input{accent-color:var(--accent);margin-top:4px}
+table{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line);border-radius:18px;overflow:hidden}.overview td,.overview th{padding:14px 16px;border-bottom:1px solid var(--line);text-align:left;font-size:14px}.overview th{background:#f0f3ef;color:#53645e}.overview tr:last-child td{border-bottom:0}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:18px}.card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:22px}.card h3{margin:0 0 14px}.card ul{margin:0;padding-left:20px}.card li{margin:7px 0}
+.safety{border-left:4px solid var(--danger);background:#fbf6f3}.safety strong{color:var(--danger)}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap}.btn{border:1px solid var(--line);background:#fff;border-radius:999px;padding:8px 13px;cursor:pointer;color:var(--ink)}.btn:hover{background:#f0f3ef}
+.progress{height:8px;background:#e8ece8;border-radius:99px;overflow:hidden;margin-top:10px}.progress i{display:block;height:100%;width:0;background:var(--accent);transition:.25s}.progress-label{font-size:12px;color:var(--muted);margin-top:7px}
+footer{margin-top:50px;text-align:center;color:var(--muted);font-size:12px}
+@media(max-width:800px){.stats,.path,.two,.detail-grid{grid-template-columns:1fr 1fr}.hero{padding:30px}.item{grid-template-columns:70px 1fr}.mins{display:none}}
+@media(max-width:560px){.nav{padding:0 12px}.nav a{padding:7px 8px}.nav a:nth-child(n+3){display:none}.wrap{padding:18px 14px 50px}.hero{padding:25px 20px}.hero:after{right:-20px;font-size:190px}.stats,.path,.two,.detail-grid,.checklist{grid-template-columns:1fr}.lead{font-size:16px}.section{margin-top:34px}.panel-top{display:block}.pill{display:inline-block;margin-top:12px}}
+@media print{.topbar,.toolbar{display:none}.wrap{max-width:none}.hero{box-shadow:none}.lesson-panel{break-inside:avoid}}
+</style>
+</head>
+<body>
+<header class="topbar">
+<nav class="nav">
+<div class="brand">八段锦 · 教学管理<small>BA DUAN JIN / TEACHING PLAN</small></div>
+<a href="#overview">总览</a><a href="#lessons">课时</a><a href="#assessment">考核</a><a href="#safety">安全</a>
+</nav>
+</header>
+
+<main class="wrap">
+<section class="hero" id="overview">
+<div class="kicker">零基础成人班 · 4 × 60 MIN</div>
+<h1>健身气功·八段锦<br>四课时教学计划</h1>
+<p class="lead">面向 8—12 人的渐进式教学方案。核心路径：<b>认识身体 → 掌握动作 → 连贯串联 → 独立完整练习</b>。</p>
+<div class="stats">
+<div class="stat"><b>4</b><span>课时</span></div><div class="stat"><b>60′</b><span>每节课</span></div><div class="stat"><b>8</b><span>核心动作</span></div><div class="stat"><b>1</b><span>结课能力：独立完整演练</span></div>
+</div>
+</section>
+
+<section class="section">
+<div class="section-head"><div><h2>课程学习地图</h2><p>每一课都建立在上一课的基础上</p></div></div>
+<div class="path">
+<div class="lesson" onclick="go('lesson1')"><span class="num">01</span><h3>建立基础</h3><p>基本身型 · 起势 · 第一、二式</p><span class="tag">认识身体</span></div>
+<div class="lesson" onclick="go('lesson2')"><span class="num">02</span><h3>继续扩展</h3><p>复习前两式 · 第三、四式</p><span class="tag">掌握动作</span></div>
+<div class="lesson" onclick="go('lesson3')"><span class="num">03</span><h3>动作进阶</h3><p>复习前四式 · 第五、六式</p><span class="tag">连贯串联</span></div>
+<div class="lesson" onclick="go('lesson4')"><span class="num">04</span><h3>完整收束</h3><p>第七、八式 · 收势 · 全套演练</p><span class="tag">独立练习</span></div>
+</div>
+</section>
+
+<section class="section">
+<div class="section-head"><div><h2>四课时总览</h2><p>快速确认每节课“教什么、复习什么、课后练什么”</p></div></div>
+<table class="overview"><thead><tr><th>课次</th><th>新授内容</th><th>复习内容</th><th>课后任务</th></tr></thead>
+<tbody>
+<tr><td><b>第 1 节</b></td><td>起势、第一式、第二式</td><td>基本身型、手型、步型、站桩</td><td>站桩 2 分钟 + 前两式各 3 遍</td></tr>
+<tr><td><b>第 2 节</b></td><td>第三式、第四式</td><td>起势、第一、二式</td><td>前四式每天 1—2 遍</td></tr>
+<tr><td><b>第 3 节</b></td><td>第五式、第六式</td><td>前四式</td><td>前六式每天 1—2 遍</td></tr>
+<tr><td><b>第 4 节</b></td><td>第七式、第八式、收势</td><td>前六式</td><td>完整套路每天 1 遍，每周至少 5 天</td></tr>
+</tbody></table>
+</section>
+
+<section class="section" id="lessons">
+<div class="section-head"><div><h2>教练课堂工作台</h2><p>按时间轴授课；勾选完成项可记录本次教学进度</p></div>
+<div class="toolbar"><button class="btn" onclick="window.print()">打印教案</button><button class="btn" onclick="resetChecks()">清空勾选</button></div></div>
+
+<div class="lesson-panel" id="lesson1">
+<div class="panel-top"><div><h3>第 1 节｜基础身型 + 起势 + 第一、二式</h3><p class="objective">目标：建立课堂规范，掌握基本站姿、呼吸和起势，学会前两式。</p></div><span class="pill">60 分钟</span></div>
+<div class="timeline">
+<div class="item"><div class="time">0—5′</div><div><strong>课程导入</strong><small>介绍八段锦源流、功效、练习原则、安全事项</small></div><span class="mins">5 min</span></div>
+<div class="item"><div class="time">5—15′</div><div><strong>热身与调息</strong><small>颈、肩、腕、腰、髋、膝、踝；原地踏步；无极桩 2 分钟</small></div><span class="mins">10 min</span></div>
+<div class="item"><div class="time">15—25′</div><div><strong>基本身型</strong><small>并步、开立、马步、弓步；掌、拳、八字掌；沉肩、松腰、敛臀</small></div><span class="mins">10 min</span></div>
+<div class="item"><div class="time">25—40′</div><div><strong>起势 + 第一式</strong><small>两手托天理三焦：掌根上撑、拔伸脊柱、肩沉肘坠；上托吸、下落呼，初学自然呼吸</small></div><span class="mins">15 min</span></div>
+<div class="item"><div class="time">40—52′</div><div><strong>第二式</strong><small>左右开弓似射雕：马步稳定、扩胸沉肩、肘与肩平；注意膝对脚尖、尾闾下垂</small></div><span class="mins">12 min</span></div>
+<div class="item"><div class="time">52—58′</div><div><strong>串联</strong><small>起势 → 第一式 → 第二式</small></div><span class="mins">6 min</span></div>
+<div class="item"><div class="time">58—60′</div><div><strong>放松与作业</strong><small>放松拍打；布置课后练习</small></div><span class="mins">2 min</span></div>
+</div>
+<div class="detail-grid"><div class="box"><h4>🎯 教学纠错重点</h4><ul><li>第一式：避免<strong>耸肩、抬头过度、手臂僵硬</strong>。</li><li>第二式：避免<strong>马步塌腰、膝盖内扣、耸肩</strong>。</li><li>纠正原则：先松肩；膝对脚尖；尾闾下垂。</li></ul></div><div class="box"><h4>✓ 本节课检查</h4><div class="checklist"><label class="check"><input type="checkbox">基本身型</label><label class="check"><input type="checkbox">起势</label><label class="check"><input type="checkbox">第一式</label><label class="check"><input type="checkbox">第二式</label></div></div></div>
+<div class="box" style="margin-top:14px"><h4>课后任务</h4><em>每天站桩 2 分钟；起势 + 第一、二式各 3 遍。</em></div>
+</div>
+
+<div class="lesson-panel" id="lesson2">
+<div class="panel-top"><div><h3>第 2 节｜第三、四式</h3><p class="objective">目标：复习前两式，学会“调理脾胃须单举”“五劳七伤往后瞧”。</p></div><span class="pill">60 分钟</span></div>
+<div class="timeline">
+<div class="item"><div class="time">0—5′</div><div><strong>提问复习</strong><small>检查身型</small></div><span class="mins">5 min</span></div>
+<div class="item"><div class="time">5—12′</div><div><strong>热身 + 站桩调息</strong></div><span class="mins">7 min</span></div>
+<div class="item"><div class="time">12—20′</div><div><strong>复习起势、第一、二式</strong><small>重点纠正马步和托天</small></div><span class="mins">8 min</span></div>
+<div class="item"><div class="time">20—35′</div><div><strong>第三式</strong><small>调理脾胃须单举：上下对拉、身体中正；上举吸、还原呼</small></div><span class="mins">15 min</span></div>
+<div class="item"><div class="time">35—50′</div><div><strong>第四式</strong><small>五劳七伤往后瞧：转头不转体、肩髋稳定、颈项放松</small></div><span class="mins">15 min</span></div>
+<div class="item"><div class="time">50—58′</div><div><strong>串联前四式</strong></div><span class="mins">8 min</span></div>
+<div class="item"><div class="time">58—60′</div><div><strong>放松与作业</strong></div><span class="mins">2 min</span></div>
+</div>
+<div class="detail-grid"><div class="box"><h4>🎯 教学纠错重点</h4><ul><li>第三式：避免<strong>身体侧歪、手臂伸太直</strong>；强调“对拉不侧弯”。</li><li>第四式：避免<strong>转体、仰头、耸肩</strong>；下颌微收，肩下沉。</li></ul></div><div class="box"><h4>✓ 本节课检查</h4><div class="checklist"><label class="check"><input type="checkbox">前两式复习</label><label class="check"><input type="checkbox">第三式</label><label class="check"><input type="checkbox">第四式</label><label class="check"><input type="checkbox">前四式串联</label></div></div></div>
+<div class="box" style="margin-top:14px"><h4>课后任务</h4><em>前四式每天 1—2 遍；重点体会“对拉”和“转头不转体”。</em></div>
+</div>
+
+<div class="lesson-panel" id="lesson3">
+<div class="panel-top"><div><h3>第 3 节｜第五、六式</h3><p class="objective">目标：复习前四式，学会“摇头摆尾去心火”“两手攀足固肾腰”。</p></div><span class="pill">60 分钟</span></div>
+<div class="timeline">
+<div class="item"><div class="time">0—5′</div><div><strong>复习提问</strong><small>强调呼吸自然</small></div><span class="mins">5 min</span></div>
+<div class="item"><div class="time">5—12′</div><div><strong>热身 + 站桩</strong></div><span class="mins">7 min</span></div>
+<div class="item"><div class="time">12—22′</div><div><strong>复习前四式</strong><small>纠正第三、四式</small></div><span class="mins">10 min</span></div>
+<div class="item"><div class="time">22—37′</div><div><strong>第五式</strong><small>摇头摆尾去心火：马步稳、脊柱侧屈旋转、颈肩放松；慢速、小幅</small></div><span class="mins">15 min</span></div>
+<div class="item"><div class="time">37—52′</div><div><strong>第六式</strong><small>两手攀足固肾腰：先屈髋再屈腰，膝可微屈；手到小腿即可</small></div><span class="mins">15 min</span></div>
+<div class="item"><div class="time">52—58′</div><div><strong>串联前六式</strong></div><span class="mins">6 min</span></div>
+<div class="item"><div class="time">58—60′</div><div><strong>放松与作业</strong></div><span class="mins">2 min</span></div>
+</div>
+<div class="detail-grid"><div class="box"><h4>🎯 教学纠错重点</h4><ul><li>第五式：避免<strong>甩头过猛、膝盖晃动、憋气</strong>；先稳定马步。</li><li>第六式：避免<strong>猛低头、拱背过猛、起身过快</strong>；前屈幅度以舒适为度。</li></ul></div><div class="box"><h4>✓ 本节课检查</h4><div class="checklist"><label class="check"><input type="checkbox">前四式复习</label><label class="check"><input type="checkbox">第五式</label><label class="check"><input type="checkbox">第六式</label><label class="check"><input type="checkbox">前六式串联</label></div></div></div>
+<div class="box" style="margin-top:14px"><h4>课后任务</h4><em>前六式每天 1—2 遍；第六式前屈幅度以舒适为度。</em></div>
+</div>
+
+<div class="lesson-panel" id="lesson4">
+<div class="panel-top"><div><h3>第 4 节｜第七、八式 + 收势 + 完整套路</h3><p class="objective">目标：学会最后两式和收势，完整串联全套，进行简单评估。</p></div><span class="pill">60 分钟</span></div>
+<div class="timeline">
+<div class="item"><div class="time">0—5′</div><div><strong>结课目标与安全</strong></div><span class="mins">5 min</span></div>
+<div class="item"><div class="time">5—10′</div><div><strong>热身 + 站桩调息</strong></div><span class="mins">5 min</span></div>
+<div class="item"><div class="time">10—20′</div><div><strong>复习前六式</strong></div><span class="mins">10 min</span></div>
+<div class="item"><div class="time">20—30′</div><div><strong>第七式</strong><small>攒拳怒目增气力：沉肩，力从腰腿，不耸肩；冲拳呼、收拳吸</small></div><span class="mins">10 min</span></div>
+<div class="item"><div class="time">30—40′</div><div><strong>第八式</strong><small>背后七颠百病消：提踵、头向上顶、稍停、落踵轻震，共 7 次</small></div><span class="mins">10 min</span></div>
+<div class="item"><div class="time">40—45′</div><div><strong>收势</strong><small>两掌相叠于丹田，静养片刻，还原；呼吸自然</small></div><span class="mins">5 min</span></div>
+<div class="item"><div class="time">45—57′</div><div><strong>完整跟练 + 抽练</strong><small>完整跟练一遍，重点段落抽练</small></div><span class="mins">12 min</span></div>
+<div class="item"><div class="time">57—60′</div><div><strong>答疑、评估、后续建议</strong></div><span class="mins">3 min</span></div>
+</div>
+<div class="detail-grid"><div class="box"><h4>🎯 教学纠错重点</h4><ul><li>第七式：避免<strong>耸肩、只用手臂、马步塌腰</strong>；强调腰腿发力。</li><li>第八式：避免<strong>落地过重、身体前后晃</strong>；控制平衡，必要时扶墙练习。</li></ul></div><div class="box"><h4>✓ 结课检查</h4><div class="checklist"><label class="check"><input type="checkbox">第七式</label><label class="check"><input type="checkbox">第八式</label><label class="check"><input type="checkbox">收势</label><label class="check"><input type="checkbox">完整演练</label></div></div></div>
+<div class="box" style="margin-top:14px"><h4>课后任务</h4><em>每天完整练习 1 遍；每周至少 5 天，并记录身体感受。</em></div>
+</div>
+</section>
+
+<section class="section" id="assessment">
+<div class="section-head"><div><h2>结课考核</h2><p>从“会动作”走向“能独立完成”</p></div></div>
+<div class="card">
+<div class="checklist">
+<label class="check"><input type="checkbox">① 动作顺序：独立完成起势、八式、收势，顺序正确</label>
+<label class="check"><input type="checkbox">② 身型：中正安舒，沉肩坠肘，松腰敛臀，马步不塌腰</label>
+<label class="check"><input type="checkbox">③ 动作质量：路线清楚，上下相随，柔和缓慢，圆活连贯</label>
+<label class="check"><input type="checkbox">④ 呼吸：不憋气，能自然配合，熟练者做到起吸落呼</label>
+<label class="check"><input type="checkbox">⑤ 完整演练：连续完成全套，无明显停顿、遗忘</label>
+<label class="check"><input type="checkbox">⑥ 安全意识：知道自身限制，能调整幅度</label>
+</div>
+<div class="progress"><i id="bar"></i></div><div class="progress-label" id="label">完成度 0 / 6</div>
+</div>
+</section>
+
+<section class="section" id="safety">
+<div class="section-head"><div><h2>安全与个体调整</h2><p>教学中优先保证舒适、稳定与安全</p></div></div>
+<div class="two">
+<div class="card safety"><h3>⚠ 练习前注意</h3><ul><li>饭后 1 小时内、酒后、极度疲劳、发热、急性病期不宜练。</li><li>严重高血压、眩晕、颈椎病、腰椎病、膝关节病、孕妇、术后人群，应先咨询医生。</li><li>出现头晕、胸闷、心慌、关节痛，立即停止，坐下休息。</li></ul></div>
+<div class="card"><h3>个体调整与教学口令</h3><ul><li>马步高度、前屈幅度、颠足强度均可减小。</li><li>中老年学员以“微汗、不喘、能说话”为强度标准。</li><li>教练口令应缓慢、清晰：先镜面示范，再背面示范，最后个别纠正。</li><li>初学不强行逆腹式呼吸，不憋气。</li></ul></div>
+</div>
+</section>
+
+<section class="section">
+<div class="section-head"><div><h2>教学原则</h2><p>贯穿四节课的统一尺度</p></div></div>
+<div class="two">
+<div class="card"><h3>动作教学</h3><ul><li>先分解，后完整；先下肢路线，后上肢细节。</li><li>先求松柔，再求整齐。</li><li>每式一般练 3—6 次，第八式“背后七颠”7 次。</li></ul></div>
+<div class="card"><h3>呼吸与强度</h3><ul><li>呼吸以自然为主，熟练后逐步配合“起吸落呼、开吸合呼、升吸降呼”。</li><li>不追求低马步、大幅度，尤其中老年学员以舒适、稳定为度。</li></ul></div>
+</div>
+</section>
+
+<footer>八段锦四课时教学计划 · 适用于零基础成人班 · 可直接用于课堂备课、授课与结课检查</footer>
+</main>
+
+<script>
+function go(id){document.getElementById(id).scrollIntoView({behavior:'smooth',block:'start'})}
+const checks=[...document.querySelectorAll('input[type=checkbox]')];
+const key='baduanjin-teaching-checks-v1';
+function save(){localStorage.setItem(key,JSON.stringify(checks.map(x=>x.checked)));update()}
+function update(){
+  const n=checks.filter(x=>x.checked).length;
+  const bar=document.getElementById('bar'), label=document.getElementById('label');
+  if(bar)bar.style.width=(n/checks.length*100)+'%';
+  if(label)label.textContent='完成度 '+n+' / '+checks.length;
+}
+const saved=JSON.parse(localStorage.getItem(key)||'null');
+if(saved&&saved.length===checks.length)checks.forEach((x,i)=>x.checked=!!saved[i]);
+checks.forEach(x=>x.addEventListener('change',save));
+function resetChecks(){checks.forEach(x=>x.checked=false);save()}
+update();
+</script>
+</body>
+</html>
